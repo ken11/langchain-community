@@ -70,22 +70,26 @@ class TreeSitterSegmenter(CodeSegmenter):
         processed_lines = set()
 
         simplified_lines = self.source_lines[:]
-        for node, name in query.captures(tree.root_node):
-            start_line = node.start_point[0]
-            end_line = node.end_point[0]
+        # capture_name ごとにノードリストを取得するよう変更
+        captures: dict[str, list] = query.captures(tree.root_node)
+        for capture_name, nodes in captures.items():
+            for node in nodes:
+                start_line = node.start_point[0]
+                end_line   = node.end_point[0]
 
-            lines = list(range(start_line, end_line + 1))
-            if any(line in processed_lines for line in lines):
-                continue
+                lines = list(range(start_line, end_line + 1))
+                if any(line in processed_lines for line in lines):
+                    continue
 
-            simplified_lines[start_line] = self.make_line_comment(
-                f"Code for: {self.source_lines[start_line]}"
-            )
+                # 元の先頭行をコメント化
+                simplified_lines[start_line] = self.make_line_comment(
+                    f"Code for: {self.source_lines[start_line]}"
+                )
+                # 本体を削除
+                for line_num in range(start_line + 1, end_line + 1):
+                    simplified_lines[line_num] = None  # type: ignore[call-overload]
 
-            for line_num in range(start_line + 1, end_line + 1):
-                simplified_lines[line_num] = None  # type: ignore[call-overload]
-
-            processed_lines.update(lines)
+                processed_lines.update(lines)
 
         return "\n".join(line for line in simplified_lines if line is not None)
 
