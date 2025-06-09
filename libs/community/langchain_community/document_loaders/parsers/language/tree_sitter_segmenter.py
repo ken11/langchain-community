@@ -91,8 +91,7 @@ class TreeSitterSegmenter(CodeSegmenter):
     def get_parser(self) -> "Parser":
         from tree_sitter import Parser
 
-        parser = Parser()
-        parser.set_language(self.get_language())
+        parser = Parser(self.get_language())
         return parser
 
     @abstractmethod
