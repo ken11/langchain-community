@@ -6,7 +6,7 @@ from langchain_community.document_loaders.parsers.language.code_segmenter import
 )
 
 if TYPE_CHECKING:
-    from tree_sitter import Language, Parser
+    from tree_sitter import Language, Node, Parser
 
 
 class TreeSitterSegmenter(CodeSegmenter):
@@ -41,22 +41,23 @@ class TreeSitterSegmenter(CodeSegmenter):
 
         parser = self.get_parser()
         tree = parser.parse(bytes(self.code, encoding="UTF-8"))
-        captures = query.captures(tree.root_node)
+        captures: dict[str, list[Node]] = query.captures(tree.root_node)
 
         processed_lines = set()
-        chunks = []
+        chunks: List[str] = []
 
-        for node, name in captures:
-            start_line = node.start_point[0]
-            end_line = node.end_point[0]
-            lines = list(range(start_line, end_line + 1))
+        for capture_name, nodes in captures.items():
+            for node in nodes:
+                start_line = node.start_point[0]
+                end_line   = node.end_point[0]
+                lines = range(start_line, end_line + 1)
 
-            if any(line in processed_lines for line in lines):
-                continue
+                if any(line in processed_lines for line in lines):
+                    continue
 
-            processed_lines.update(lines)
-            chunk_text = node.text.decode("UTF-8")
-            chunks.append(chunk_text)
+                processed_lines.update(lines)
+                chunk_text = node.text.decode("UTF-8")
+                chunks.append(chunk_text)
 
         return chunks
 
