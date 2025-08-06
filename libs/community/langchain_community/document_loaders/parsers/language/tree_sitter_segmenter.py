@@ -41,7 +41,7 @@ class TreeSitterSegmenter(CodeSegmenter):
 
         parser = self.get_parser()
         tree = parser.parse(bytes(self.code, encoding="UTF-8"))
-        captures: dict[str, list[Node]] = query.captures(tree.root_node)
+        query_captures: Dict[str, List[Node]] = query.captures(tree.root_node)
 
         processed_lines = set()
         chunks: List[str] = []
