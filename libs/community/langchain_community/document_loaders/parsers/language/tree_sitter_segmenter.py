@@ -49,7 +49,7 @@ class TreeSitterSegmenter(CodeSegmenter):
         for capture_name, nodes in query_captures.items():
             for node in nodes:
                 start_line = node.start_point[0]
-                end_line   = node.end_point[0]
+                end_line = node.end_point[0]
                 lines = range(start_line, end_line + 1)
 
                 if any(line in processed_lines for line in lines):
@@ -74,7 +74,7 @@ class TreeSitterSegmenter(CodeSegmenter):
         for capture_name, nodes in captures.items():
             for node in nodes:
                 start_line = node.start_point[0]
-                end_line   = node.end_point[0]
+                end_line = node.end_point[0]
 
                 lines = list(range(start_line, end_line + 1))
                 if any(line in processed_lines for line in lines):
