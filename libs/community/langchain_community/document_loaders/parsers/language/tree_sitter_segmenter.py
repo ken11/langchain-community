@@ -46,7 +46,7 @@ class TreeSitterSegmenter(CodeSegmenter):
         processed_lines = set()
         chunks: List[str] = []
 
-        for capture_name, nodes in captures.items():
+        for capture_name, nodes in query_captures.items():
             for node in nodes:
                 start_line = node.start_point[0]
                 end_line   = node.end_point[0]
