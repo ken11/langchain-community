@@ -10,12 +10,8 @@ if TYPE_CHECKING:
 
 CHUNK_QUERY = """
     [
-        (call target: ((identifier) @_identifier
-            (#any-of? @_identifier "defmodule" "defprotocol" "defimpl"))) @module
-        (call target: ((identifier) @_identifier
-            (#any-of? @_identifier "def" "defmacro" "defmacrop" "defp"))) @function
-        (unary_operator operator: "@" operand: (call target: ((identifier) @_identifier
-              (#any-of? @_identifier "moduledoc" "typedoc""doc")))) @comment
+        (call (identifier) (do_block)) @definition
+        (unary_operator operator: "@" operand: (call)) @comment
     ]
 """.strip()
 

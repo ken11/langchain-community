@@ -9,11 +9,7 @@ if TYPE_CHECKING:
 
 CHUNK_QUERY = """
     [
-        (create_table_statement) @create
-        (select_statement) @select
-        (insert_statement) @insert
-        (update_statement) @update
-        (delete_statement) @delete
+        (statement) @statement
     ]
 """
 
