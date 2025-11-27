@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 CHUNK_QUERY = """
     [
-        (function_definition) @subroutine
+        (subroutine_declaration_statement) @subroutine
     ]
 """.strip()
 
